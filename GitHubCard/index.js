@@ -11,6 +11,7 @@ const getPromise = axios.get("https://api.github.com/users/Dionne-Stratton");
 
 getPromise
   .then((response) => {
+    console.log(response)
     console.log(response.data);
     const myData = createCard(response.data);
     mainCard.appendChild(myData)
@@ -50,7 +51,6 @@ const followersArray = [
   "https://api.github.com/users/dustinmyers",
   "https://api.github.com/users/luishrd",
   "https://api.github.com/users/bigknell",
-  "https://api.github.com/users/justml",
 ];
 
 followersArray.map((element) => {
@@ -84,52 +84,56 @@ followersArray.map((element) => {
     </div>
 */
 
-function createCard(info) {
+function createCard({avatar_url, name, login, Location, html_url, followers, following, bio}) { 
+  //instantiating the elements
+  /*
+  avatar_url = image url of user
+  name = users name
+  loginName = users user name
+  Location = user location
+  html_url = address to users github page
+  followers = users followers count
+  following = users following count
+  bio = users bio
+  */
+  const card = document.createElement('div');
+  const userImage = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const usersName = document.createElement('h3');
+  const usersLoginName = document.createElement('p');
+  const usersLocation = document.createElement('p');
+  const userProfile = document.createElement('p');
+  const usersGithubAddress = document.createElement('a');
+  const usersFollowers = document.createElement('p');
+  const usersFollowing = document.createElement('p');
+  const userBio = document.createElement('p');
 
-  //CREATE ELEMENTS
-  const card = document.createElement('div'),
-    userImg = document.createElement('img'),
-    cardInfo = document.createElement('div'),
-    name = document.createElement('h3'),
-    username = document.createElement('p'),
-    location = document.createElement('p'),
-    profile = document.createElement('p'),
-    link = document.createElement('a'),
-    followers = document.createElement('p'),
-    following = document.createElement('p'),
-    bio = document.createElement('p')
-
-  //CREATE STRUCTURE
-  card.appendChild(userImg);
-  card.appendChild(cardInfo);
-  cardInfo.appendChild(name);
-  cardInfo.appendChild(username);
-  cardInfo.appendChild(location);
-  cardInfo.appendChild(profile);
-  cardInfo.appendChild(link);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(following);
-  cardInfo.appendChild(bio);
-
-  //set class NAMES
-  card.classList.add("card");
+    //creating the hierarchy.
+    card.appendChild(userImage);
+    card.appendChild(cardInfo);
+    cardInfo.appendChild(usersName);
+    cardInfo.appendChild(usersLoginName);
+    cardInfo.appendChild(usersLocation);
+    cardInfo.appendChild(userProfile);
+    userProfile.appendChild(usersGithubAddress);
+    cardInfo.appendChild(usersFollowers);
+    cardInfo.appendChild(usersFollowing);
+    cardInfo.appendChild(userBio);
+  //setting class names
+  card.classList.add('card');
   cardInfo.classList.add('card-info');
-  name.classList.add('name');
-  username.classList.add('username');
-
-  //add CONTENT
-  userImg.src = info.avatar_url;
-  name.textContent = `Name: ${info.name}`;
-  username.textContent = `Username: ${info.login}`;
-  location.textContent = `Location: ${info.location}`;
-  profile.textContent = `Profile:`;
-  link.textContent = `Github Link`;
-  link.setAttribute("href", info.html_url);
-  followers.textContent = `Followers: ${info.followers}`;
-  following.textContent = `Following: ${info.following}`;
-  bio.textContent = `Bio: ${info.bio}`;
-
-  console.log("card", card);
-
+  usersName.classList.add('name');
+  usersLoginName.classList.add('username');
+  //setting attributes and text
+  userImage.src = avatar_url; 
+  usersName.textContent = name;
+  usersLoginName.textContent = login;
+  usersGithubAddress.setAttribute('href', html_url);
+  usersGithubAddress.textContent = `Profile: ${html_url}`;
+  usersLocation.textContent = `Location: ${Location}`;
+  userProfile.href= `Profile: ${html_url}`;
+  usersFollowers.textContent = `Followers: ${followers}`;
+  usersFollowing.textContent = `Following: ${following}`;
+  userBio.textContent = `Bio: ${bio}`;
   return card;
 }
